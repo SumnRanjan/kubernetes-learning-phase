@@ -1,0 +1,77 @@
+# Cluster
+kind create cluster --name mycluster --config kind-config.yaml
+kind get clusters
+kind delete cluster --name mycluster
+
+# Namespace
+kubectl create namespace nginx
+kubectl get namespaces
+kubectl delete namespace nginx
+
+# Apply / Delete YAML files
+kubectl apply -f deployment.yml
+kubectl apply -f service.yml
+kubectl apply -f ingress.yml
+kubectl delete -f deployment.yml
+kubectl delete -f service.yml
+kubectl delete -f ingress.yml
+
+# Pods
+kubectl get pods
+kubectl get pods -n nginx
+kubectl get pods -o wide
+kubectl describe pod <pod-name> -n nginx
+kubectl delete pod <pod-name> -n nginx
+kubectl logs <pod-name> -n nginx
+kubectl logs -f <pod-name> -n nginx
+kubectl exec -it <pod-name> -n nginx -- bash
+
+# Deployments
+kubectl get deployments -n nginx
+kubectl describe deployment <deployment-name> -n nginx
+kubectl scale deployment/<deployment-name> --replicas=3 -n nginx
+kubectl rollout restart deployment/<deployment-name> -n nginx
+kubectl rollout status deployment/<deployment-name> -n nginx
+kubectl delete deployment <deployment-name> -n nginx
+
+# ReplicaSets
+kubectl get replicasets -n nginx
+kubectl describe replicaset <replicaset-name> -n nginx
+
+# Services
+kubectl get services -n nginx
+kubectl describe service <service-name> -n nginx
+kubectl delete service <service-name> -n nginx
+
+# Ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl get ingress -n nginx
+kubectl describe ingress <ingress-name> -n nginx
+kubectl get pods -n ingress-nginx
+kubectl logs -n ingress-nginx deployment/ingress-nginx-controller
+
+# Nodes
+kubectl get nodes
+kubectl describe node <node-name>
+
+# Namespaces resources
+kubectl get all -n nginx
+
+# Port Forward
+kubectl port-forward service/nginx-service -n nginx 8080:80
+kubectl port-forward pod/<pod-name> -n nginx 8080:80
+
+# ConfigMaps and Secrets
+kubectl get configmap -n nginx
+kubectl get secret -n nginx
+
+# Persistent Volumes
+kubectl get pv
+kubectl get pvc -n nginx
+kubectl describe pv <pv-name>
+kubectl describe pvc <pvc-name> -n nginx
+
+# Context
+kubectl config get-contexts
+kubectl config current-context
+kubectl cluster-info
