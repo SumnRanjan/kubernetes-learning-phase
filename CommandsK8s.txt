@@ -113,3 +113,112 @@ kubectl apply -f configmap.yml
 kubectl apply -f secret.yml
 kubectl delete -f configmap.yml
 kubectl delete -f secret.yml
+
+# Horizontal Pod Autoscaler (HPA)
+kubectl get hpa -n nginx
+kubectl get hpa -A
+kubectl describe hpa <hpa-name> -n nginx
+kubectl autoscale deployment/<deployment-name> --cpu-percent=50 --min=1 --max=5 -n nginx
+kubectl delete hpa <hpa-name> -n nginx
+kubectl edit hpa <hpa-name> -n nginx
+kubectl apply -f hpa.yml
+kubectl delete -f hpa.yml
+
+# Vertical Pod Autoscaler (VPA)
+kubectl get vpa -n nginx
+kubectl get vpa -A
+kubectl describe vpa <vpa-name> -n nginx
+kubectl apply -f vpa.yml
+kubectl delete -f vpa.yml
+
+# Metrics Server
+kubectl get deployment metrics-server -n kube-system
+kubectl get pods -n kube-system | grep metrics-server
+kubectl top nodes
+kubectl top pods
+kubectl top pods -n nginx
+
+# Rollout History / Undo
+kubectl rollout history deployment/<deployment-name> -n nginx
+kubectl rollout undo deployment/<deployment-name> -n nginx
+kubectl rollout undo deployment/<deployment-name> --to-revision=2 -n nginx
+
+# Events
+kubectl get events -n nginx
+kubectl get events --sort-by=.metadata.creationTimestamp -n nginx
+
+# Resource Usage
+kubectl top pod <pod-name> -n nginx
+kubectl top node <node-name>
+
+# YAML Output
+kubectl get deployment <deployment-name> -n nginx -o yaml
+kubectl get service <service-name> -n nginx -o yaml
+kubectl get pod <pod-name> -n nginx -o yaml
+
+# Watch Resources
+kubectl get pods -n nginx -w
+kubectl get deployments -n nginx -w
+kubectl get svc -n nginx -w
+kubectl get hpa -n nginx -w
+
+# Edit Resources
+kubectl edit deployment <deployment-name> -n nginx
+kubectl edit service <service-name> -n nginx
+kubectl edit configmap <configmap-name> -n nginx
+kubectl edit secret <secret-name> -n nginx
+
+# Jobs / CronJobs
+kubectl get jobs -n nginx
+kubectl get cronjobs -n nginx
+kubectl describe job <job-name> -n nginx
+kubectl describe cronjob <cronjob-name> -n nginx
+kubectl delete job <job-name> -n nginx
+kubectl delete cronjob <cronjob-name> -n nginx
+
+# DaemonSets
+kubectl get daemonsets -n nginx
+kubectl describe daemonset <daemonset-name> -n nginx
+kubectl delete daemonset <daemonset-name> -n nginx
+
+# Labels / Selectors
+kubectl get pods --show-labels -n nginx
+kubectl get pods -l app=nginx -n nginx
+kubectl label pod <pod-name> env=dev -n nginx
+kubectl label deployment <deployment-name> env=prod -n nginx
+
+# Taints / Tolerations
+kubectl describe node <node-name> | grep Taints
+kubectl taint nodes <node-name> key=value:NoSchedule
+kubectl taint nodes <node-name> key=value:NoSchedule-
+
+# Drain / Cordon Nodes
+kubectl cordon <node-name>
+kubectl uncordon <node-name>
+kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data
+
+# Copy Files
+kubectl cp <pod-name>:/path/in/container/file.txt ./file.txt -n nginx
+kubectl cp ./file.txt <pod-name>:/path/in/container/file.txt -n nginx
+
+# Debugging
+kubectl describe pod <pod-name> -n nginx
+kubectl logs <pod-name> --previous -n nginx
+kubectl exec -it <pod-name> -n nginx -- sh
+kubectl exec -it <pod-name> -n nginx -- env
+
+# Networking
+kubectl get endpoints -n nginx
+kubectl describe endpoints <service-name> -n nginx
+kubectl run test-pod --image=busybox -it --rm -- sh
+kubectl exec -it <pod-name> -n nginx -- curl http://<service-name>
+
+# Namespace Shortcuts
+kubectl config set-context --current --namespace=nginx
+kubectl config view --minify | grep namespace:
+
+# Node Affinity
+kubectl get nodes --show-labels
+kubectl label node worker-node-1 disktype=ssd
+kubectl describe node worker-node-1
+kubectl get pods -o wide

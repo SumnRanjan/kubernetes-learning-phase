@@ -1,0 +1,58 @@
+# At first lable the node using ->
+# kubectl label node worker-node-1 disktype=ssd
+# kubectl label node worker-node-2 disktype=hdd
+
+# Now check lable node 
+# kubectl get nodes --show-labels
+
+
+
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                - ssd
+
+      containers:
+      - name: apache
+        image: httpd:latest
+
+  #   affinity:
+  #       nodeAffinity:
+  #       preferredDuringSchedulingIgnoredDuringExecution:
+  #       - weight: 1
+  #         preference:
+  #         matchExpressions:
+  #         - key: disktype
+  #           operator: In 
+  #           values:
+  #           - ssd
+
+# In = label value must match given values
+# NotIn = label value must not match given values
+# Exists = label key must exist
+# DoesNotExist = label key must not exist
+# Gt = label value must be greater than given value
+# Lt = label value must be less than given value

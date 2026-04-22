@@ -1,3 +1,13 @@
+# to use hpa (Install Metrics Server):
+# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# kubectl -n kube-system edit deployment metrics-server
+# - --kubelet-insecure-tls
+# - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
+# kubectl -n kube-system rollout restart deployment metrics-server
+
+# for details exp....
+# https://github.com/LondheShubham153/kubestarter/tree/main/HPA_VPA 
+
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
