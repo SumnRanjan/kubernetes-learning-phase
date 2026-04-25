@@ -222,3 +222,46 @@ kubectl get nodes --show-labels
 kubectl label node worker-node-1 disktype=ssd
 kubectl describe node worker-node-1
 kubectl get pods -o wide
+
+1. Create Helm chart
+helm create node-js-app
+
+2. Move inside chart
+cd node-js-app
+
+3. Edit values.yaml
+- Set your Docker image
+image:
+  repository: trainwithshubham/node-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+4. (Optional) Edit service.yaml
+- Set correct port (e.g., Node app runs on 3000)
+
+5. Check chart for errors
+helm lint .
+
+6. Dry run (see generated YAML)
+helm template node .
+
+7. Create namespace
+kubectl create namespace dev-node
+
+8. Install Helm chart
+helm install dev-node-js-app . -n dev-node
+
+9. Check pods
+kubectl get pods -n dev-node
+
+10. Make changes → Upgrade
+helm upgrade dev-node-js-app . -n dev-node
+
+11. Check service (for access)
+kubectl get svc -n dev-node
+
+12. (Optional) Package chart
+helm package .
+
+13. Delete Helm release
+helm uninstall dev-node-js-app -n dev-node
